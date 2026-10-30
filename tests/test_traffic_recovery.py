@@ -292,3 +292,63 @@ def test_intersection_cross_traffic_collision_prevention(recovery_setup):
     assert amb2.position != graph.nodes["N_2_1"].world_pos
 
 
+def test_opposite_direction_ambulances_pass_smoothly(recovery_setup):
+    """Verify that two ambulances traveling in opposite directions pass smoothly without colliding or deadlocking."""
+    import math
+
+    from src.models.ambulance import AmbulanceStatus
+    from src.systems.ambulance_movement import update_ambulance_movement
+
+    state, _algo, graph, pathfinder = recovery_setup
+    state.is_started = True
+
+    # Amb 1 heads East along row 2 from N_1_2 to N_4_2
+    amb1 = Ambulance(
+        id="AMB-PASS-EAST",
+        unit_class=AmbulanceClass.ALS,
+        position=graph.nodes["N_1_2"].world_pos,
+        status=AmbulanceStatus.EN_ROUTE,
+        speed_mps=15.0
+    )
+    r1 = pathfinder.find_route("N_1_2", "N_4_2")
+    assert r1 is not None
+    state.active_routes[amb1.id] = r1
+    amb1.active_route_id = r1.id
+
+    # Amb 2 heads West along row 2 from N_4_2 to N_1_2
+    amb2 = Ambulance(
+        id="AMB-PASS-WEST",
+        unit_class=AmbulanceClass.BLS,
+        position=graph.nodes["N_4_2"].world_pos,
+        status=AmbulanceStatus.EN_ROUTE,
+        speed_mps=15.0
+    )
+    r2 = pathfinder.find_route("N_4_2", "N_1_2")
+    assert r2 is not None
+    state.active_routes[amb2.id] = r2
+    amb2.active_route_id = r2.id
+
+    state.fleet[amb1.id] = amb1
+    state.fleet[amb2.id] = amb2
+
+    min_separation = 999.0
+    deadlock_stop_count = 0
+
+    # Step simulation through full pass
+    for _ in range(120):
+        update_ambulance_movement(state, 0.05)
+        d = math.hypot(amb1.position[0] - amb2.position[0], amb1.position[1] - amb2.position[1])
+        min_separation = min(min_separation, d)
+        # Verify neither vehicle permanently freezes mid-travel
+        if (amb1.current_speed == 0.0 and amb1.position[0] < 10.0) or (amb2.current_speed == 0.0 and amb2.position[0] > -65.0):
+            deadlock_stop_count += 1
+
+    # Right-lane offsets (+1.6m each) maintain ~3.1-3.2m lateral separation without physical collision
+    assert min_separation >= 2.5
+    assert deadlock_stop_count == 0
+    # Both vehicles successfully traversed past each other to their destinations
+    assert amb1.position[0] > 0.0
+    assert amb2.position[0] < -60.0
+
+
+
