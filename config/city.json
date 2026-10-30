@@ -1,0 +1,18 @@
+{
+  "grid_width": 8,
+  "grid_height": 8,
+  "block_size": 28.0,
+  "road_width": 5.0,
+  "default_speed_limit_mps": 15.0,
+  "seed": 42,
+  "hospitals": [
+    { "id": "HOSP-01", "node_x": 2, "node_y": 2, "name": "Central Emergency Trauma" },
+    { "id": "HOSP-02", "node_x": 5, "node_y": 5, "name": "Mercy General Care" },
+    { "id": "HOSP-03", "node_x": 2, "node_y": 6, "name": "Metro Heart & Critical" }
+  ],
+  "parking_depots": [
+    { "id": "DEPOT-01", "node_x": 1, "node_y": 1, "name": "West District EMS Depot" },
+    { "id": "DEPOT-02", "node_x": 6, "node_y": 2, "name": "South District EMS Depot" },
+    { "id": "DEPOT-03", "node_x": 4, "node_y": 6, "name": "North District EMS Depot" }
+  ]
+}

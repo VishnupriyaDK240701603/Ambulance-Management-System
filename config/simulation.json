@@ -1,0 +1,85 @@
+{
+  "simulation": {
+    "title": "LifeLine Dispatch",
+    "version": "1.0.0",
+    "tick_rate": 20,
+    "fixed_dt": 0.05,
+    "initial_deployment_limit": 8,
+    "max_ambulances": 8
+  },
+  "ambulance_classes": {
+    "BLS": {
+      "name": "Basic Life Support",
+      "speed_mps": 14.0,
+      "capabilities": ["cpr", "oxygen", "basic_first_aid", "splinting"],
+      "cost_per_km": 1.5,
+      "color": [0.2, 0.7, 0.9, 1.0]
+    },
+    "ALS": {
+      "name": "Advanced Life Support",
+      "speed_mps": 16.0,
+      "capabilities": ["cpr", "oxygen", "basic_first_aid", "splinting", "iv_access", "intubation", "cardiac_monitor", "defibrillator"],
+      "cost_per_km": 2.2,
+      "color": [0.95, 0.45, 0.15, 1.0]
+    },
+    "CCT": {
+      "name": "Critical Care Transport",
+      "speed_mps": 15.0,
+      "capabilities": ["cpr", "oxygen", "basic_first_aid", "splinting", "iv_access", "intubation", "cardiac_monitor", "defibrillator", "ventilator", "critical_meds", "ecmo"],
+      "cost_per_km": 3.0,
+      "color": [0.85, 0.15, 0.2, 1.0]
+    }
+  },
+  "hospitals": [
+    {
+      "id": "HOSP-01",
+      "name": "Central Emergency Trauma",
+      "node_id": "N_2_2",
+      "total_beds": 12,
+      "occupied_beds": 7,
+      "vacant_beds": 5,
+      "capabilities": ["basic", "trauma", "cardiac", "icu", "respiratory"],
+      "operational_status": "NORMAL"
+    },
+    {
+      "id": "HOSP-02",
+      "name": "Mercy General Care",
+      "node_id": "N_5_5",
+      "total_beds": 10,
+      "occupied_beds": 6,
+      "vacant_beds": 4,
+      "capabilities": ["basic", "trauma", "pediatric", "icu"],
+      "operational_status": "NORMAL"
+    },
+    {
+      "id": "HOSP-03",
+      "name": "Metro Heart & Critical",
+      "node_id": "N_2_6",
+      "total_beds": 8,
+      "occupied_beds": 5,
+      "vacant_beds": 3,
+      "capabilities": ["basic", "cardiac", "critical", "icu"],
+      "operational_status": "NORMAL"
+    }
+  ],
+  "police": {
+    "speed_mps": 18.0,
+    "default_clearance_time_sec": 8.0
+  },
+  "dispatch_weights": {
+    "eta_weight": 0.55,
+    "distance_weight": 0.25,
+    "capability_bonus": 0.1,
+    "workload_penalty": 0.1
+  },
+  "hospital_weights": {
+    "eta_weight": 0.45,
+    "bed_availability_weight": 0.35,
+    "capability_match_weight": 0.20,
+    "switching_penalty_sec": 30.0
+  },
+  "traffic_recovery": {
+    "reroute_improvement_threshold_sec": 10.0,
+    "police_wait_multiplier": 1.2
+  }
+}

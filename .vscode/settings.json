@@ -1,0 +1,11 @@
+{
+  "python.defaultInterpreterPath": "C:\\Users\\dkvis\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}",
+    "C:\\Users\\dkvis\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages"
+  ],
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportMissingImports": "none",
+    "reportMissingTypeStubs": "none"
+  }
+}
